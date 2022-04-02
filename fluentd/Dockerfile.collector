@@ -1,0 +1,7 @@
+FROM "fluent/fluentd:latest"
+
+RUN apk --no-cache --update add build-base ruby-dev postgresql-dev
+
+RUN fluent-gem install fluent-plugin-sql --no-document
+RUN fluent-gem install pg --no-document
+RUN fluent-gem install fluent-plugin-record-modifier --no-document

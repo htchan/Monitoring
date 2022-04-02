@@ -1,0 +1,52 @@
+version: "3.9"
+
+services:
+  collector:
+    build:
+      context: ./fluentd
+      dockerfile: Dockerfile.collector
+    profiles:
+      - collector
+      - all
+    volumes:
+      - ".:/usr/src/app"
+    networks:
+      - default
+    command: "tail -f /dev/null"
+  db:
+    build:
+      context: ./postgres
+      dockerfile: Dockerfile.db
+    profiles:
+      - db
+      - all
+    env_file:
+      - ./postgres/.env.db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - default
+  visualize:
+    build:
+      context: ./grafana
+      dockerfile: Dockerfile.visualize
+    profiles:
+      - visualize
+      - all
+    networks:
+      - router
+      - default
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana_data:/var/lib/grafana
+
+volumes:
+  postgres_data:
+  grafana_data:
+
+networks:
+  router:
+    driver: bridge
+    name: router
+  default:
