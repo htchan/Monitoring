@@ -7,7 +7,7 @@ all:
 	docker-compose --profile all up -d --force-recreate --build
 
 collector:
-	docker-compose --profile fluentd up -d --force-recreate --build 
+	docker-compose --profile collector up -d --force-recreate --build 
 
 db:
 	docker-compose --profile db up -d --force-recreate --build

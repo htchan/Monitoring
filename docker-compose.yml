@@ -10,6 +10,7 @@ services:
       - all
     volumes:
       - ".:/usr/src/app"
+      - /sys/fs/cgroup:/log/sys/fs/cgroup
     networks:
       - default
     command: "tail -f /dev/null"
