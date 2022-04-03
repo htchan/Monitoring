@@ -9,11 +9,12 @@ services:
       - collector
       - all
     volumes:
-      - ".:/usr/src/app"
-      - /sys/fs/cgroup:/log/sys/fs/cgroup
+      - ./fluentd:/usr/src/app
+      - /sys/fs/cgroup:/log/resources
+      - /var/lib/docker/containers/:/log/containers
     networks:
       - default
-    command: "tail -f /dev/null"
+    command: fluentd -c config.conf
   db:
     build:
       context: ./postgres
