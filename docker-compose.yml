@@ -12,9 +12,12 @@ services:
       - ./fluentd:/usr/src/app
       - /sys/fs/cgroup:/log/resources
       - /var/lib/docker/containers/:/log/containers
+      - ../WebHistory/backend/assets/fluentd/:/config/web-history/
+      - ../WebHistory/bin/logs/:/log/web-history/
     networks:
       - default
     command: fluentd -c config.conf
+    # command: tail -f /dev/null
   db:
     build:
       context: ./postgres
