@@ -10,12 +10,12 @@ create table docker_container_names (
     name text
 );
 
-create unique index on docker_container_names (container_id, name);
+create unique index on docker_container_names (container_id);
 
 create table docker_container_logs (
-    id bigint primary key auto increment,
+    id bigserial primary key,
     service text,
     action text,
     data text,
     created_at timestamptz not null
-)
+);
