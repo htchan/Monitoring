@@ -18,7 +18,9 @@ services:
       - /sys/fs/cgroup:/log/resources
       - /var/lib/docker/containers/:/log/containers
       - ../WebHistory/backend/assets/fluentd/:/config/web-history/
+      - ../BookSpider/backend/assets/fluentd/:/config/book-spider/
       - ../WebHistory/bin/logs/:/log/web-history/
+      - ../BookSpider/bin/logs/:/log/book-spider/
     networks:
       - default
     environment:
