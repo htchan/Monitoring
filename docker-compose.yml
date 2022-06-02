@@ -15,7 +15,7 @@ services:
       - all
     volumes:
       - ./fluentd:/usr/src/app
-      - /sys/fs/cgroup:/log/resources
+      - /sys/fs/cgroup/system.slice:/log/resources
       - /var/lib/docker/containers/:/log/containers
       - ../WebHistory/backend/assets/fluentd/:/config/web-history/
       - ../BookSpider/backend/assets/fluentd/:/config/book-spider/
@@ -54,7 +54,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: '75M'
+          memory: '150M'
 
     profiles:
       - visualize

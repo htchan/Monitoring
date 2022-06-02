@@ -1,14 +1,12 @@
-id=$(for i in {1..30}; do echo -n "?"; done)
+file_pattern="/log/resources/docker-*.scope/memory.current"
 
-mem_files=$(ls /log/resources/memory/docker/$id*/memory.stat)
+mem_files=$(ls $file_pattern)
 
 for file in $mem_files
 do
-    content=$(cat $file | grep -E '^cache |^rss ' | sed "s/[a-z]//g")
-    sum=0
-    for num in $content
-    do
-	    sum=$(expr $sum + $num)
-    done
-    echo $file $sum
+    replace_string=$(echo "$file_pattern" | sed "s/*/(.*)/g" | sed -e 's/\//\\\//g')
+    docker_id=$(echo "$file" | sed -r "s/$replace_string/\1/g")
+    content=$(cat $file)
+
+    echo $docker_id mem $content
 done

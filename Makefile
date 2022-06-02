@@ -7,7 +7,7 @@ all:
 	docker-compose --profile all up -d
 
 collector:
-	docker-compose --profile collector up -d 
+	docker-compose --profile collector up -d --force-recreate 
 
 db:
 	docker-compose --profile db up -d
