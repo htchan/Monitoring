@@ -66,6 +66,17 @@ services:
       - 3000:3000
     volumes:
       - grafana_data:/var/lib/grafana
+  backup:
+    image: alpine:latest
+    deploy:
+      resources:
+        limits:
+          memory: '10M'
+    volumes:
+      - grafana_data:/grafana_source
+      - ./grafana/data:/grafana_dest
+    profiles:
+      - backup
 
 volumes:
   postgres_data:

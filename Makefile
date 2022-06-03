@@ -14,3 +14,9 @@ db:
 
 visualize:
 	docker-compose --profile visualize up -d
+
+backup:
+	docker-compose run backup sh -c 'cp -Rv /grafana_source/* /grafana_dest'
+
+restore:
+	docker-compose run backup sh -c 'cp -Rv /grafana_dest/* /grafana_source'
