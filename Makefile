@@ -20,3 +20,6 @@ backup:
 
 restore:
 	docker-compose run backup sh -c 'cp -Rv /grafana_dest/* /grafana_source'
+
+jaeger:
+	docker-compose --profile jaeger up -d
