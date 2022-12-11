@@ -23,3 +23,6 @@ restore:
 
 jaeger:
 	docker-compose --profile jaeger up -d
+
+cadvisor:
+	docker-compose --profile cadvisor up -d
