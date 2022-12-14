@@ -26,3 +26,6 @@ jaeger:
 
 cadvisor:
 	docker-compose --profile cadvisor up -d
+
+prometheus:
+	docker-compose --profile prometheus up -d
