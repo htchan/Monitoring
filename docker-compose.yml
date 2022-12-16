@@ -1,52 +1,6 @@
 version: "3.9"
 
 services:
-  collector:
-    build:
-      context: ./fluentd
-      dockerfile: Dockerfile.collector
-    deploy:
-      resources:
-        limits:
-          memory: '150M'
-
-    profiles:
-      - collector
-      - all
-    volumes:
-      - ./fluentd:/usr/src/app
-      - /sys/fs/cgroup/system.slice:/log/resources
-      - /var/lib/docker/containers/:/log/containers
-      - ../WebHistory/backend/assets/fluentd/:/config/web-history/
-      - ../BookSpider/backend/assets/fluentd/:/config/book-spider/
-      - ../WebHistory/bin/logs/:/log/web-history/
-      - ../BookSpider/bin/logs/:/log/book-spider/
-    networks:
-      - default
-    environment:
-      - RUBY_GC_HEAP_OLDOBJECT_LIMIT_FACTOR=1.2
-
-    command: fluentd -c config.conf
-    # command: tail -f /dev/null
-  db:
-    build:
-      context: ./postgres
-      dockerfile: Dockerfile.db
-    deploy:
-      resources:
-        limits:
-          memory: '100M'
-      restart_policy:
-        condition: on-failure
-    profiles:
-      - db
-      - all
-    env_file:
-      - ./postgres/.env.db
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    networks:
-      - default
   grafana:
     build:
       context: ./grafana
@@ -95,6 +49,10 @@ services:
   cadvisor:
     # image: gcr.io/cadvisor/cadvisor:latest
     image: gcr.io/cadvisor/cadvisor-arm64:v0.46.0
+    deploy:
+      resources:
+        limits:
+          memory: '150M'
     privileged: true
     ports:
       - 8080:8080
@@ -113,6 +71,10 @@ services:
       - cadvisor
   prometheus:
     image: prom/prometheus
+    deploy:
+      resources:
+        limits:
+          memory: '250M'
     ports:
       - 9090:9090
     volumes:
