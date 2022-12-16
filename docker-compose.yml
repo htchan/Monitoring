@@ -69,6 +69,7 @@ services:
     hostname: cadvisor
     profiles:
       - cadvisor
+      - all
   prometheus:
     image: prom/prometheus
     deploy:
@@ -83,6 +84,7 @@ services:
       - trace
     profiles:
       - prometheus
+      - all
 
 volumes:
   postgres_data:
