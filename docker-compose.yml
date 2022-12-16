@@ -47,7 +47,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - default
-  visualize:
+  grafana:
     build:
       context: ./grafana
       dockerfile: Dockerfile.visualize
@@ -57,13 +57,14 @@ services:
           memory: '150M'
 
     profiles:
-      - visualize
+      - grafana
       - all
     networks:
       - router
       - default
+      - trace
     ports:
-      - 3000:3000
+      - 3001:3000
     volumes:
       - grafana_data:/var/lib/grafana
   backup:
@@ -86,13 +87,14 @@ services:
     hostname: monitoring
     ports:
       - 3000:16686
-      - 14268:14268
+        #- 14268:14268
     networks:
       - trace
     profiles:
       - jaeger
   cadvisor:
-    image: gcr.io/cadvisor/cadvisor:latest
+    # image: gcr.io/cadvisor/cadvisor:latest
+    image: gcr.io/cadvisor/cadvisor-arm64:v0.46.0
     privileged: true
     ports:
       - 8080:8080
