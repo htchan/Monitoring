@@ -54,6 +54,9 @@ services:
         limits:
           memory: '150M'
     privileged: true
+    command:
+      - "--docker_only=true"
+      - "--housekeeping_interval=10s"
     volumes:
       - /:/roofs:ro
       - /var/run:/var/run:ro
