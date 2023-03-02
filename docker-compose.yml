@@ -84,6 +84,18 @@ services:
     profiles:
       - prometheus
       - all
+  temperature-collector:
+    build:
+      context: ./temperature-collector
+    deploy:
+      resources:
+        limits:
+          memory: '10M'
+    profiles:
+      - temperature
+      - all
+    networks:
+      - trace
 
 volumes:
   postgres_data:

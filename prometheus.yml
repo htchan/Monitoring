@@ -27,3 +27,8 @@ scrape_configs:
     - action: keep
       source_labels: [service]
       regex: (.+)
+- job_name: device_temperature
+  scrape_interval: 60s
+  static_configs:
+  - targets:
+    - temperature-collector:8000

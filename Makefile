@@ -1,4 +1,4 @@
-.PHONY: build all collector db grafana
+.PHONY: build all collector db grafana temperature-collector
 
 build:
 	docker-compose --profile all build
@@ -25,7 +25,10 @@ jaeger:
 	docker-compose --profile jaeger up -d
 
 cadvisor:
-	docker-compose --profile cadvisor up -d
+	docker-compose --profile cadvisor up -d --force-recreate
 
 prometheus:
-	docker-compose --profile prometheus up -d
+	docker-compose --profile prometheus up -d --force-recreate
+
+temperature-collector:
+	docker-compose up -d --force-recreate temperature-collector
