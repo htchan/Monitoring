@@ -9,6 +9,7 @@ services:
       resources:
         limits:
           memory: '150M'
+    hostname: monitoring_grafana
 
     profiles:
       - grafana
@@ -29,7 +30,7 @@ services:
           memory: '10M'
     volumes:
       - grafana_data:/grafana_source
-      - ./grafana/data:/grafana_dest
+      - ./grafana-backup:/grafana_dest
     profiles:
       - backup
   jaeger:
@@ -79,6 +80,8 @@ services:
           memory: '250M'
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - 9090:9090
     networks:
       - trace
     profiles:
@@ -96,6 +99,8 @@ services:
       - all
     networks:
       - trace
+    ports:
+      - 8000:8000
 
 volumes:
   postgres_data:
