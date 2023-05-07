@@ -89,7 +89,7 @@ services:
       - all
   temperature-collector:
     build:
-      context: ./temperature-collector
+      context: ./go-temperature-collector
     deploy:
       resources:
         limits:
