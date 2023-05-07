@@ -21,6 +21,8 @@ services:
     ports:
       - 3001:3000
     volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/etc/dashboards
       - grafana_data:/var/lib/grafana
   backup:
     image: alpine:latest

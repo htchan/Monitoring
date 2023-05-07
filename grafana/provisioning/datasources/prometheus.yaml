@@ -1,0 +1,14 @@
+apiVersion: 1
+
+datasources:
+- name: Prometheus
+  type: prometheus
+  access: proxy
+  url: http://prometheus:9090
+  jsonData:
+    tlsSkipVerify: true
+    manageAlerts: false
+  allowUiUpdates: true
+  version: 1
+  uid: 6_yBz0cVz
+  editable: true
