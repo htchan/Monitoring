@@ -98,12 +98,28 @@ services:
           memory: '10M'
     profiles:
       - temperature
+      - collector
       - all
     networks:
       - trace
     ports:
       - 8000:8000
-
+  container-resource-collector:
+    build:
+      context: ./container-resource-collector
+    deploy:
+      resources:
+        limits:
+          memory: '10M'
+    profiles:
+      - container-resource
+      - collector
+      - all
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - trace
+    
 volumes:
   postgres_data:
   grafana_data:

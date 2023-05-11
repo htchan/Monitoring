@@ -32,3 +32,8 @@ scrape_configs:
   static_configs:
   - targets:
     - temperature-collector:8000
+- job_name: container_resource
+  scrape_interval: 60s
+  static_config:
+  - targets:
+    - container-resource-collector:8000 
