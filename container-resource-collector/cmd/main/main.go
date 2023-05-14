@@ -8,6 +8,7 @@ import (
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/client"
 	"github.com/htchan/ContainerResourceCollector/internal/container"
+	"github.com/htchan/ContainerResourceCollector/internal/http"
 )
 
 const INTERVAL = time.Second * 5
@@ -21,7 +22,6 @@ func updateContainers(ctx context.Context, cli *client.Client) {
 		log.Printf("list container error: %v\n", err)
 		return
 	}
-	log.Printf("container length: %d\n", len(containers))
 
 	containerIDs := make([]string, 0)
 	for containerID := range containerMap {
@@ -54,10 +54,6 @@ func updateContainers(ctx context.Context, cli *client.Client) {
 
 					containerMap[id].ReadResource(ctx, cli)
 					time.Sleep(INTERVAL)
-					log.Println(containerMap[id].Resources.CPU)
-					log.Println(containerMap[id].Resources.Memory)
-					log.Println(containerMap[id].Resources.Network)
-					log.Println(containerMap[id].Resources.UpdatedAt)
 				}
 			}(c.ID)
 		}
@@ -76,10 +72,12 @@ func main() {
 
 	background := context.Background()
 
-	// go func() {
-	for {
-		updateContainers(background, cli)
-		time.Sleep(INTERVAL)
-	}
-	// }()
+	go func() {
+		for {
+			updateContainers(background, cli)
+			time.Sleep(INTERVAL)
+		}
+	}()
+
+	http.ServeHTTP(&containerMap)
 }

@@ -1,4 +1,4 @@
-.PHONY: build all collector db grafana temperature-collector
+.PHONY: build all collector db grafana temperature-collector container-resource-collector
 
 build:
 	docker-compose --profile all build
@@ -34,5 +34,5 @@ temperature-collector:
 	docker-compose up -d --force-recreate temperature-collector
 
 container-resource-collector:
-	docker-compose up -d --force-recreate --build container-stats
+	docker-compose up -d --force-recreate --build container-resource-collector
 
