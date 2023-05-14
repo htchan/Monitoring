@@ -19,6 +19,9 @@ type ResourceParser struct {
 
 	MemoryStats struct {
 		Usage int64 `json:"usage"`
+		Stats struct {
+			InactiveFile int64 `json:"inactive_file"`
+		} `json:"stats"`
 		Limit int64 `json:"limit"`
 	} `json:"memory_stats"`
 
@@ -79,8 +82,11 @@ func ParseResourceUsage(data []byte) (*Resources, error) {
 	return &Resources{
 		UpdatedAt: readTime,
 		CPU:       CPUResources{Usage: parser.CpuStats.CpuUsage.TotalUsage},
-		Memory:    MemoryResources{UsageBytes: parser.MemoryStats.Usage, LimitBytes: parser.MemoryStats.Limit},
-		Network:   networkResources,
+		Memory: MemoryResources{
+			UsageBytes: parser.MemoryStats.Usage - parser.MemoryStats.Stats.InactiveFile,
+			LimitBytes: parser.MemoryStats.Limit,
+		},
+		Network: networkResources,
 	}, nil
 }
 
