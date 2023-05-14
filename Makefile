@@ -24,9 +24,6 @@ restore:
 jaeger:
 	docker-compose --profile jaeger up -d
 
-cadvisor:
-	docker-compose --profile cadvisor up -d --force-recreate
-
 prometheus:
 	docker-compose --profile prometheus up -d --force-recreate
 

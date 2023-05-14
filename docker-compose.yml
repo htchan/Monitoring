@@ -49,31 +49,6 @@ services:
       - trace
     profiles:
       - jaeger
-  cadvisor:
-    # image: gcr.io/cadvisor/cadvisor:latest
-    image: gcr.io/cadvisor/cadvisor-arm64:v0.46.0
-    deploy:
-      resources:
-        limits:
-          memory: '150M'
-    privileged: true
-    command:
-      - "--docker_only=true"
-      - "--housekeeping_interval=10s"
-    volumes:
-      - /:/roofs:ro
-      - /var/run:/var/run:ro
-      - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
-      - /dev/disk/:/dev/disk:ro
-    devices:
-      - /dev/kmsg
-    networks:
-      - trace
-    hostname: cadvisor
-    profiles:
-      - cadvisor
-      - all
   prometheus:
     image: prom/prometheus
     deploy:

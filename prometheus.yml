@@ -1,32 +1,4 @@
 scrape_configs:
-- job_name: cadvisor
-  scrape_interval: 20s
-  static_configs:
-  - targets:
-    - cadvisor:8080
-  metric_relabel_configs:
-    - action: drop
-      source_labels: [__name__]
-      regex: (container_cpu_(system|user)_seconds_total|container_cpu_load_average_10s)
-    - action: drop
-      source_labels: [__name__]
-      regex: container_fs_.+
-    - action: drop
-      source_labels: [__name__]
-      regex: container_memory_(caccontainer_memory_he|failcnt|failures_total|mapped_file|max_usage_bytes|migrate|numa_pages|rss|swap|usage_bytes|cache)
-    - action: replace
-      source_labels: [container_label_com_docker_compose_project]
-      target_label: project
-    - action: replace
-      source_labels: [container_label_com_docker_compose_service]
-      target_label: service
-    - action: labeldrop
-      regex: container_label_com_docker_compose_.*
-    - action: labeldrop
-      regex: container_label_maintainer
-    - action: keep
-      source_labels: [service]
-      regex: (.+)
 - job_name: device_temperature
   scrape_interval: 20s
   static_configs:
