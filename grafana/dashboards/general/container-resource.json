@@ -25,7 +25,7 @@
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "id": 2,
-  "iteration": 1683425571377,
+  "iteration": 1684553546904,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -62,7 +62,7 @@
               },
               {
                 "color": "red",
-                "value": 250
+                "value": 80
               }
             ]
           }
@@ -75,7 +75,7 @@
         "x": 0,
         "y": 1
       },
-      "id": 16,
+      "id": 24,
       "options": {
         "colorMode": "value",
         "graphMode": "area",
@@ -100,11 +100,11 @@
             "type": "prometheus",
             "uid": "6_yBz0cVz"
           },
-          "expr": "sum(rate(container_cpu_usage_seconds_total{project=~\"$Project\", service=~\"$Service\"}[$__rate_interval]) * 100)",
+          "expr": "sum(rate(docker_container_cpu_usage{project=~\"$Project\", service=~\"$Service\"}[$__rate_interval]) / 10000000)",
           "refId": "A"
         }
       ],
-      "title": "Total CPU usage",
+      "title": "Total CPU usage (private collector)",
       "type": "stat"
     },
     {
@@ -214,10 +214,11 @@
               },
               {
                 "color": "red",
-                "value": 2048
+                "value": 2147483648
               }
             ]
-          }
+          },
+          "unit": "decbytes"
         },
         "overrides": []
       },
@@ -227,7 +228,7 @@
         "x": 0,
         "y": 5
       },
-      "id": 18,
+      "id": 26,
       "options": {
         "colorMode": "value",
         "graphMode": "area",
@@ -249,11 +250,11 @@
             "type": "prometheus",
             "uid": "6_yBz0cVz"
           },
-          "expr": "sum(container_memory_working_set_bytes{project=~\"$Project\", service=~\"$Service\"}) / (1024^2)",
+          "expr": "sum(docker_container_memory_usage{project=~\"$Project\", service=~\"$Service\"})",
           "refId": "A"
         }
       ],
-      "title": "Total Memory Usage (MB)",
+      "title": "Total Memory Usage (MB) (private collector)",
       "type": "stat"
     },
     {
@@ -410,7 +411,7 @@
         "x": 0,
         "y": 11
       },
-      "id": 2,
+      "id": 20,
       "options": {
         "legend": {
           "calcs": [],
@@ -422,7 +423,6 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "8.5.2",
       "targets": [
         {
           "datasource": {
@@ -430,13 +430,103 @@
             "uid": "6_yBz0cVz"
           },
           "editorMode": "code",
-          "expr": "rate(container_cpu_usage_seconds_total{project=~\"$Project\", service=~\"$Service\"}[$__rate_interval]) * 100",
-          "legendFormat": "{{name}}",
+          "expr": "rate(docker_container_cpu_usage{project=~\"$Project\", service=~\"$Service\"}[$__rate_interval]) / 10000000",
+          "legendFormat": "{{project}}-{{service}}",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "CPU Usage",
+      "title": "CPU Usage (private collector)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "6_yBz0cVz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "decmbytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 20
+      },
+      "id": 22,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "6_yBz0cVz"
+          },
+          "editorMode": "code",
+          "expr": "(docker_container_memory_usage{project=~\"$Project\", service=~\"$Service\"}) / (1024^2)",
+          "legendFormat": "{{project}}-{{service}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Memory Usage (private collector)",
       "type": "timeseries"
     },
     {
@@ -462,13 +552,16 @@
               "viz": false
             },
             "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
             "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "auto",
-            "spanNulls": false,
+            "showPoints": "never",
+            "spanNulls": true,
             "stacking": {
               "group": "A",
               "mode": "none"
@@ -482,14 +575,16 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "decbytes"
         },
         "overrides": []
       },
@@ -497,9 +592,9 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 20
+        "y": 28
       },
-      "id": 4,
+      "id": 28,
       "options": {
         "legend": {
           "calcs": [],
@@ -518,13 +613,26 @@
             "uid": "6_yBz0cVz"
           },
           "editorMode": "code",
-          "expr": "(container_memory_working_set_bytes{project=~\"$Project\", service=~\"$Service\"}) / (1024^2)",
-          "legendFormat": "{{name}}",
+          "expr": "rate(docker_container_network_receive{project=~\"$Project\", service=~\"$Service\"} [$__rate_interval])",
+          "interval": "",
+          "legendFormat": "{{project}}-{{service}}-{{interface}}-receive",
           "range": true,
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "6_yBz0cVz"
+          },
+          "editorMode": "code",
+          "expr": "rate(docker_container_network_transmit{project=~\"$Project\", service=~\"$Service\"} [$__rate_interval])",
+          "hide": false,
+          "legendFormat": "{{project}}-{{service}}-{{interface}}-send",
+          "range": true,
+          "refId": "B"
         }
       ],
-      "title": "Memory Usage",
+      "title": "Network Usage",
       "type": "timeseries"
     }
   ],
@@ -565,9 +673,13 @@
       {
         "allValue": ".+",
         "current": {
-          "selected": false,
-          "text": "batch",
-          "value": "batch"
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
         },
         "datasource": {
           "type": "prometheus",
@@ -600,6 +712,6 @@
   "timezone": "",
   "title": "Container Resource",
   "uid": "GRcEi054z",
-  "version": 23,
+  "version": 27,
   "weekStart": ""
 }
