@@ -42,6 +42,13 @@ services:
         limits:
           memory: '50M'
     hostname: monitoring
+    environment: 
+      - SPAN_STORAGE_TYPE=badger
+      - BADGER_EPHEMERAL=false
+      - BADGER_DIRECTORY_VALUE=/badger/data
+      - BADGER_DIRECTORY_KEY=/badger/key
+    volumes:
+      - ./jaeger/badger:/badger
     ports:
       - 8000:16686
         #- 14268:14268
