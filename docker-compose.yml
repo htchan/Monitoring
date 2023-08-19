@@ -99,7 +99,34 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - trace
-    
+  loki:
+    image: grafana/loki:latest
+    hostname: monitoring_loki
+    ports:
+      - 3100:3100
+    # command: -config.gile=/etc/loki/local-config.yaml
+    volumes:
+      # - ./loki/loki-config.yaml:/etc/loki/local-config.yaml
+      - ./loki/storage:/loki
+    networks:
+      - trace
+  fluent-bit:
+    image: grafana/fluent-bit-plugin-loki
+    networks:
+      - trace
+    volumes:
+      - ./fluent-bit:/fluent-bit/etc/
+    command: [
+      "/fluent-bit/bin/fluent-bit",
+      "-R",
+      "/fluent-bit/etc/parsers.conf",
+      "-e",
+      "/fluent-bit/bin/out_grafana_loki.so",
+      "-c",
+      "/fluent-bit/etc/fluent-bit.conf"
+    ]
+
+
 volumes:
   postgres_data:
   grafana_data:
