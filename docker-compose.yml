@@ -10,9 +10,8 @@ services:
         limits:
           memory: '150M'
     hostname: monitoring_grafana
-
     profiles:
-      - grafana
+      - UI
       - all
     networks:
       - router
@@ -55,7 +54,9 @@ services:
     networks:
       - trace
     profiles:
-      - jaeger
+      - trace
+      - ingester
+      - all
   prometheus:
     image: prom/prometheus
     deploy:
@@ -69,7 +70,8 @@ services:
     networks:
       - trace
     profiles:
-      - prometheus
+      - metrics
+      - ingester
       - all
   temperature-collector:
     build:
@@ -79,7 +81,7 @@ services:
         limits:
           memory: '10M'
     profiles:
-      - temperature
+      - metrics
       - collector
       - all
     networks:
@@ -92,7 +94,7 @@ services:
         limits:
           memory: '10M'
     profiles:
-      - container-resource
+      - metrics
       - collector
       - all
     volumes:
@@ -108,14 +110,22 @@ services:
     volumes:
       # - ./loki/loki-config.yaml:/etc/loki/local-config.yaml
       - ./loki/storage:/loki
+    profiles:
+      - logs
+      - ingester
+      - all
     networks:
       - trace
-  fluent-bit:
+  logs-collector:
     image: grafana/fluent-bit-plugin-loki
     networks:
       - trace
     volumes:
       - ./fluent-bit:/fluent-bit/etc/
+    profiles:
+      - logs
+      - collector
+      - all
     command: [
       "/fluent-bit/bin/fluent-bit",
       "-R",
