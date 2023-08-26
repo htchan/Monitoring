@@ -1,2 +1,3 @@
 loki/storage/
 grafana-backup/
+jaeger/badger/
