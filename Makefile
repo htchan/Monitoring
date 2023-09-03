@@ -10,7 +10,7 @@ collector:
 	docker-compose --profile collector up -d --force-recreate 
 
 ingester:
-	docker-compose up -d ingester
+	docker-compose --profile ingester up -d --force-recreate 
 
 frontend:
 	docker-compose --profile frontend up -d
