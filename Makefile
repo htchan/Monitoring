@@ -1,4 +1,4 @@
-.PHONY: build all collector grafana backup restore jaeger temperature-collector container-resource-collector
+.PHONY: build all collector ingester frontend log metrics trace backup restore
 
 build:
 	docker-compose --profile all build
@@ -12,8 +12,8 @@ collector:
 ingester:
 	docker-compose up -d ingester
 
-ui:
-	docker-compose --profile UI up -d
+frontend:
+	docker-compose --profile frontend up -d
 
 log:
 	docker-compose --profile logs up -d
