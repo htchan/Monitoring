@@ -31,7 +31,7 @@ services:
           memory: '10M'
     volumes:
       - grafana_data:/grafana_source
-      - ./backup/grafana-dashboard:/grafana_dest
+      - ./backup/grafana:/grafana_dest
     profiles:
       - backup
   jaeger:
