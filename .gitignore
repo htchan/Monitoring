@@ -1,2 +1,3 @@
-loki/storage/
-grafana-backup/
+ingesters/loki/storage/
+ingesters/jaeger/badger/
+backup/grafana/

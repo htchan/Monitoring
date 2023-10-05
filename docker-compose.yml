@@ -3,16 +3,15 @@ version: "3.9"
 services:
   grafana:
     build:
-      context: ./grafana
+      context: ./frontend/grafana
       dockerfile: Dockerfile.visualize
     deploy:
       resources:
         limits:
           memory: '150M'
     hostname: monitoring_grafana
-
     profiles:
-      - grafana
+      - frontend
       - all
     networks:
       - router
@@ -21,8 +20,8 @@ services:
     ports:
       - 3001:3000
     volumes:
-      - ./grafana/provisioning:/etc/grafana/provisioning
-      - ./grafana/dashboards:/etc/dashboards
+      - ./frontend/grafana/provisioning:/etc/grafana/provisioning
+      - ./frontend/grafana/dashboards:/etc/dashboards
       - grafana_data:/var/lib/grafana
   backup:
     image: alpine:latest
@@ -32,7 +31,7 @@ services:
           memory: '10M'
     volumes:
       - grafana_data:/grafana_source
-      - ./grafana-backup:/grafana_dest
+      - ./backup/grafana:/grafana_dest
     profiles:
       - backup
   jaeger:
@@ -48,14 +47,16 @@ services:
       - BADGER_DIRECTORY_VALUE=/badger/data
       - BADGER_DIRECTORY_KEY=/badger/key
     volumes:
-      - ./jaeger/badger:/badger
+      - ./ingesters/jaeger/badger:/badger
     ports:
       - 8000:16686
         #- 14268:14268
     networks:
       - trace
     profiles:
-      - jaeger
+      - trace
+      - ingester
+      - all
   prometheus:
     image: prom/prometheus
     deploy:
@@ -63,36 +64,37 @@ services:
         limits:
           memory: '250M'
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./ingesters/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
     ports:
       - 9090:9090
     networks:
       - trace
     profiles:
-      - prometheus
+      - metrics
+      - ingester
       - all
   temperature-collector:
     build:
-      context: ./go-temperature-collector
+      context: ./collectors/go-temperature-collector
     deploy:
       resources:
         limits:
           memory: '10M'
     profiles:
-      - temperature
+      - metrics
       - collector
       - all
     networks:
       - trace
   container-resource-collector:
     build:
-      context: ./container-resource-collector
+      context: ./collectors/container-resource-collector
     deploy:
       resources:
         limits:
           memory: '10M'
     profiles:
-      - container-resource
+      - metrics
       - collector
       - all
     volumes:
@@ -107,15 +109,23 @@ services:
     # command: -config.gile=/etc/loki/local-config.yaml
     volumes:
       # - ./loki/loki-config.yaml:/etc/loki/local-config.yaml
-      - ./loki/storage:/loki
+      - ./ingesters/loki/storage:/loki
+    profiles:
+      - logs
+      - ingester
+      - all
     networks:
       - trace
-  fluent-bit:
+  logs-collector:
     image: grafana/fluent-bit-plugin-loki
     networks:
       - trace
     volumes:
-      - ./fluent-bit:/fluent-bit/etc/
+      - ./collectors/fluent-bit:/fluent-bit/etc/
+    profiles:
+      - logs
+      - collector
+      - all
     command: [
       "/fluent-bit/bin/fluent-bit",
       "-R",

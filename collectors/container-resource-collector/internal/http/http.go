@@ -38,8 +38,11 @@ func ServeHTTP(containerMap *map[string]*container.Container) error {
 				fmt.Fprintf(w, "# HELP docker_container_network_transmit Docker container Network Transmit\n")
 				fmt.Fprintf(w, "# TYPE docker_container_network_transmit gauge\n")
 				fmt.Fprintf(w, "docker_container_network_transmit{container_id=\"%s\",project=\"%s\",service=\"%s\",interface=\"%s\"} %d\n", c.ContainerID, c.Project, c.Service, key, network.TransmitBytes)
-			}
 
+				fmt.Fprintf(w, "# HELP docker_container_last_seen Docker container Last Seen\n")
+				fmt.Fprintf(w, "# TYPE docker_container_last_seen gauge\n")
+				fmt.Fprintf(w, "docker_container_last_seen{container_id=\"%s\",project=\"%s\",service=\"%s\"} %d\n", c.ContainerID, c.Project, c.Service, c.Resources.UpdatedAt.Unix())
+			}
 		}
 	})
 
