@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim # Create PVC
+metadata:
+  name: monitoring-prometheus-data-claim # Sets name of PV
+  labels:
+    app: monitoring-prometheus
+    project: monitoring
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadOnlyMany # Sets read and write access
+  resources:
+    requests:
+      storage: 1Mi # Sets volume size
+  volumeName: monitoring-prometheus-volume
