@@ -1,0 +1,33 @@
+# storage
+apiVersion: v1
+kind: PersistentVolumeClaim # Create PVC
+metadata:
+  name: monitoring.loki.storage-claim # Sets name of PV
+  labels:
+    app: loki
+    project: monitoring
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce # Sets read and write access
+  resources:
+    requests:
+      storage: 1Gi # Sets volume size
+  volumeName: monitoring.loki.storage-volume
+---
+# config
+apiVersion: v1
+kind: PersistentVolumeClaim # Create PVC
+metadata:
+  name: monitoring.loki.config-claim # Sets name of PV
+  labels:
+    app: loki
+    project: monitoring
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadOnlyMany # Sets read and write access
+  resources:
+    requests:
+      storage: 10Mi # Sets volume size
+  volumeName: monitoring.loki.config-volume
