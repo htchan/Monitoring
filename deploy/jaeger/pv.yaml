@@ -1,0 +1,17 @@
+# storage
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: monitoring.jaeger.badger-volume
+  labels:
+    label: local
+    app: jaeger
+    project: monitoring
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /volumes/monitoring-jaeger-data/badger

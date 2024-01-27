@@ -1,0 +1,16 @@
+# storage
+apiVersion: v1
+kind: PersistentVolumeClaim # Create PVC
+metadata:
+  name: monitoring.jaeger.badger-claim # Sets name of PV
+  labels:
+    app: jaeger
+    project: monitoring
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce # Sets read and write access
+  resources:
+    requests:
+      storage: 1Gi # Sets volume size
+  volumeName: monitoring.jaeger.badger-volume

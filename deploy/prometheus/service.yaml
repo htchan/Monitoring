@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: monitoring-prometheus-service # Sets service name
+  labels:
+    app: monitoring-prometheus
+    project: monitoring
+spec:
+  ports:
+    - protocol: TCP
+      port: 9090 # Sets port to run the postgres application
+      targetPort: 9090
+  selector:
+    app: monitoring-prometheus

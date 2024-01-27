@@ -1,0 +1,50 @@
+# data
+apiVersion: v1
+kind: PersistentVolumeClaim # Create PVC
+metadata:
+  name: monitoring-grafana-data-volume-claim # Sets name of PV
+  labels:
+    app: monitoring-grafana
+    project: monitoring
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce # Sets read and write access
+  resources:
+    requests:
+      storage: 10Mi # Sets volume size
+  volumeName: monitoring-grafana-data-volume
+---
+# dashboard
+apiVersion: v1
+kind: PersistentVolumeClaim # Create PVC
+metadata:
+  name: monitoring-grafana-dashboard-volume-claim # Sets name of PV
+  labels:
+    app: monitoring-grafana
+    project: monitoring
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce # Sets read and write access
+  resources:
+    requests:
+      storage: 10Mi # Sets volume size
+  volumeName: monitoring-grafana-dashboard-volume
+---
+# provisioning
+apiVersion: v1
+kind: PersistentVolumeClaim # Create PVC
+metadata:
+  name: monitoring-grafana-provisioning-volume-claim # Sets name of PV
+  labels:
+    app: monitoring-grafana
+    project: monitoring
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce # Sets read and write access
+  resources:
+    requests:
+      storage: 10Mi # Sets volume size
+  volumeName: monitoring-grafana-provisioning-volume

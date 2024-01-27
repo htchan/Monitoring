@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: monitoring-prometheus  # Sets Deployment name
+  labels:
+    app: monitoring-prometheus
+    project: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: monitoring-prometheus
+  template:
+    metadata:
+      labels:
+        app: monitoring-prometheus
+        project: monitoring
+    spec:
+      containers:
+        - name: monitoring-prometheus
+          image: prom/prometheus:v2.40.6 # Sets Image
+          imagePullPolicy: "IfNotPresent"
+          resources:
+            limits:
+              memory: 260M
+          ports:
+            - containerPort: 9090  # Exposes container port
+              hostPort: 9091
+          volumeMounts:
+            - mountPath: /etc/prometheus/prometheus.yml
+              name: monitoring-prometheus-volume
+            - mountPath: /api-token
+              name: api-token
+              readOnly: true
+      volumes:
+        - name: monitoring-prometheus-volume
+          persistentVolumeClaim:
+            claimName: monitoring-prometheus-data-claim
+        - name: api-token
+          secret:
+            secretName: prometheus-api-user-secret
+      restartPolicy: Always

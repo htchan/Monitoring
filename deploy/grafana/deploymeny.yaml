@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: monitoring-grafana  # Sets Deployment name
+  labels:
+    app: monitoring-grafana
+    project: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: monitoring-grafana
+  template:
+    metadata:
+      labels:
+        app: monitoring-grafana
+        project: monitoring
+    spec:
+      containers:
+        - name: monitoring-grafana
+          image: grafana/grafana-oss:8.4.5 # Sets Image
+          imagePullPolicy: "IfNotPresent"
+          resources:
+            limits:
+              memory: 250M
+          ports:
+            - containerPort: 3000  # Exposes container port
+              hostPort: 3001
+          volumeMounts:
+            - mountPath: /var/lib/grafana
+              name: monitoring-grafana-data-volume
+            - mountPath: /etc/dashboards
+              name: monitoring-grafana-dashboard-volume
+            - mountPath: /etc/grafana/provisioning
+              name: monitoring-grafana-provisioning-volume
+      volumes:
+        - name: monitoring-grafana-data-volume
+          persistentVolumeClaim:
+            claimName: monitoring-grafana-data-claim
+        - name: monitoring-grafana-dashboard-volume
+          persistentVolumeClaim:
+            claimName: monitoring-grafana-dashboard-claim
+        - name: monitoring-grafana-provisioning-volume
+          persistentVolumeClaim:
+            claimName: monitoring-grafana-provisioning-claim
+      restartPolicy: Always
