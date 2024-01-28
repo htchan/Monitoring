@@ -1,19 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: monitoring-grafana  # Sets Deployment name
+  name: monitoring.grafana  # Sets Deployment name
   labels:
-    app: monitoring-grafana
+    app: grafana
     project: monitoring
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: monitoring-grafana
+      app: grafana
+      project: monitoring
   template:
     metadata:
       labels:
-        app: monitoring-grafana
+        app: grafana
         project: monitoring
     spec:
       containers:
@@ -36,11 +37,11 @@ spec:
       volumes:
         - name: monitoring-grafana-data-volume
           persistentVolumeClaim:
-            claimName: monitoring-grafana-data-claim
+            claimName: monitoring.grafana.data-claim
         - name: monitoring-grafana-dashboard-volume
           persistentVolumeClaim:
-            claimName: monitoring-grafana-dashboard-claim
+            claimName: monitoring.grafana.dashboard-claim
         - name: monitoring-grafana-provisioning-volume
           persistentVolumeClaim:
-            claimName: monitoring-grafana-provisioning-claim
+            claimName: monitoring.grafana.provisioning-claim
       restartPolicy: Always

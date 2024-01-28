@@ -2,9 +2,9 @@
 apiVersion: v1
 kind: PersistentVolumeClaim # Create PVC
 metadata:
-  name: monitoring-grafana-data-volume-claim # Sets name of PV
+  name: monitoring.grafana.data-claim # Sets name of PV
   labels:
-    app: monitoring-grafana
+    app: grafana
     project: monitoring
 spec:
   storageClassName: manual
@@ -13,15 +13,15 @@ spec:
   resources:
     requests:
       storage: 10Mi # Sets volume size
-  volumeName: monitoring-grafana-data-volume
+  volumeName: monitoring.grafana.data-volume
 ---
 # dashboard
 apiVersion: v1
 kind: PersistentVolumeClaim # Create PVC
 metadata:
-  name: monitoring-grafana-dashboard-volume-claim # Sets name of PV
+  name: monitoring.grafana.dashboard-claim # Sets name of PV
   labels:
-    app: monitoring-grafana
+    app: grafana
     project: monitoring
 spec:
   storageClassName: manual
@@ -30,15 +30,15 @@ spec:
   resources:
     requests:
       storage: 10Mi # Sets volume size
-  volumeName: monitoring-grafana-dashboard-volume
+  volumeName: monitoring.grafana.dashboard-volume
 ---
 # provisioning
 apiVersion: v1
 kind: PersistentVolumeClaim # Create PVC
 metadata:
-  name: monitoring-grafana-provisioning-volume-claim # Sets name of PV
+  name: monitoring.grafana.provisioning-claim # Sets name of PV
   labels:
-    app: monitoring-grafana
+    app: grafana
     project: monitoring
 spec:
   storageClassName: manual
@@ -47,4 +47,4 @@ spec:
   resources:
     requests:
       storage: 10Mi # Sets volume size
-  volumeName: monitoring-grafana-provisioning-volume
+  volumeName: monitoring.grafana.provisioning-volume

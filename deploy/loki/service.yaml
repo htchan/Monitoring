@@ -12,3 +12,4 @@ spec:
       targetPort: 3000
   selector:
     app: loki
+    project: monitoring

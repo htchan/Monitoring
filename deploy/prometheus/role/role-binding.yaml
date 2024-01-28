@@ -1,10 +1,13 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: cluster-admin-prometheus-api-user
+  name: monitoring.prometheus.admin-api-user
+  labels:
+    app: prometheus
+    project: monitoring
 subjects:
 - kind: ServiceAccount
-  name: prometheus-api-user
+  name: monitoring.prometheus.api-user
   namespace: default
 roleRef:
   kind: ClusterRole

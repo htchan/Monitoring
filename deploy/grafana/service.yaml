@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: monitoring-grafana-service # Sets service name
   labels:
-    app: monitoring-grafana
+    app: grafana
     project: monitoring
 spec:
   ports:
@@ -11,4 +11,5 @@ spec:
       port: 3000 # Sets port to run the postgres application
       targetPort: 3000
   selector:
-    app: monitoring-grafana
+    app: grafana
+    project: monitoring
