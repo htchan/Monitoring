@@ -2,6 +2,7 @@
 
 build:
 	docker-compose --profile all build
+	k3d image import monitoring-temperature-collector:latest -c development
 
 all:
 	docker-compose --profile all up -d
