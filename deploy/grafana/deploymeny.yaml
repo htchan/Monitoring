@@ -19,14 +19,13 @@ spec:
     spec:
       containers:
         - name: monitoring-grafana
-          image: grafana/grafana-oss:8.4.5 # Sets Image
+          image: grafana/grafana-oss:10.3.1 # Sets Image
           imagePullPolicy: "IfNotPresent"
           resources:
             limits:
               memory: 250M
-          ports:
-            - containerPort: 3000  # Exposes container port
-              hostPort: 3001
+            requests:
+              memory: 100M
           volumeMounts:
             - mountPath: /var/lib/grafana
               name: monitoring-grafana-data-volume
@@ -34,6 +33,8 @@ spec:
               name: monitoring-grafana-dashboard-volume
             - mountPath: /etc/grafana/provisioning
               name: monitoring-grafana-provisioning-volume
+            - mountPath: /etc/grafana/grafana.ini
+              name: monitoring-grafana-ini-volume
       volumes:
         - name: monitoring-grafana-data-volume
           persistentVolumeClaim:
@@ -44,4 +45,7 @@ spec:
         - name: monitoring-grafana-provisioning-volume
           persistentVolumeClaim:
             claimName: monitoring.grafana.provisioning-claim
+        - name: monitoring-grafana-ini-volume
+          persistentVolumeClaim:
+            claimName: monitoring.grafana.ini-claim
       restartPolicy: Always

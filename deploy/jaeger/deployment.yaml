@@ -23,7 +23,9 @@ spec:
           imagePullPolicy: "IfNotPresent"
           resources:
             limits:
-              memory: 50M
+              memory: 100M
+            requests:
+              memory: 30M
           env:
             - name: SPAN_STORAGE_TYPE
               value: "badger"
@@ -35,9 +37,6 @@ spec:
               value: "/badger/key"
             - name: COLLECTOR_OTLP_ENABLED
               value: "true"
-          ports:
-            - containerPort: 16686  # Exposes container port
-              hostPort: 16686
           volumeMounts:
             - mountPath: /badger
               name: monitoring-jaeger-badger-volume
@@ -46,3 +45,4 @@ spec:
           persistentVolumeClaim:
             claimName: monitoring.jaeger.badger-claim
       restartPolicy: Always
+

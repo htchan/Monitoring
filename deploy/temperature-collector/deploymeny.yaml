@@ -25,7 +25,6 @@ spec:
           resources:
             limits:
               memory: 10M
-          ports:
-            - containerPort: 8000  # Exposes container port
-              hostPort: 8001
+            requests:
+              memory: 2M
       restartPolicy: Always

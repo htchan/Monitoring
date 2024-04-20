@@ -12,7 +12,7 @@ spec:
     - ReadWriteOnce # Sets read and write access
   resources:
     requests:
-      storage: 1Gi # Sets volume size
+      storage: 10Gi # Sets volume size
   volumeName: monitoring.loki.storage-volume
 ---
 # config

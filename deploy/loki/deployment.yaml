@@ -23,10 +23,9 @@ spec:
           imagePullPolicy: "IfNotPresent"
           resources:
             limits:
-              memory: 250M
-          ports:
-            - containerPort: 3100  # Exposes container port
-              hostPort: 3100
+              memory: 500M
+            requests:
+              memory: 50M
           volumeMounts:
             - mountPath: /loki
               name: monitoring-loki-storage-volume

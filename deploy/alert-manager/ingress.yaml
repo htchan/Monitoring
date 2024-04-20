@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: monitoring.alert-manager.ingress
+spec:
+  rules:
+  - host: alert-manager.${PRIVATE_HOST}
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: monitoring-alert-manager-service
+            port:
+              number: 9093
+

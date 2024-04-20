@@ -10,7 +10,7 @@ metadata:
 spec:
   storageClassName: manual
   capacity:
-    storage: 10Mi
+    storage: 1Gi
   accessModes:
     - ReadWriteOnce
   hostPath:
@@ -32,7 +32,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: /volumes/monitoring-grafana-data/dashboard
+    path: /volumes/monitoring-grafana-data/dashboards
 ---
 # provisioning
 apiVersion: v1
@@ -51,3 +51,21 @@ spec:
     - ReadWriteOnce
   hostPath:
     path: /volumes/monitoring-grafana-data/provisioning
+---
+# ini
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: monitoring.grafana.ini-volume
+  labels:
+    label: local
+    app: grafana
+    project: monitoring
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 1Mi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /volumes/monitoring-grafana-data/grafana.ini
