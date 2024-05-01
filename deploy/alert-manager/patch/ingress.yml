@@ -1,0 +1,13 @@
+- op: replace #action 
+  path: /spec/rules
+  value:
+    - host: alert-manager.${private_host}
+      http:
+        paths:
+        - pathType: Prefix
+          path: /
+          backend:
+            service:
+              name: monitoring-alert-manager-service
+              port:
+                number: 9093
