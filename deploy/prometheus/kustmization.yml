@@ -12,7 +12,7 @@ resources:
   - ./base/pv.yml
   - ./base/pvc.yml
   - ./base/ingress.yml
-  - ./base/resource-monitoring.yaml
+  - ./base/resource-monitoring.yml
 patches:
   - target:
       group: apps
