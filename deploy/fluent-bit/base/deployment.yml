@@ -35,9 +35,9 @@ spec:
             - -c
             - /fluent-bit/etc/fluent-bit.conf
           volumeMounts:
-            - mountPath: /logs
+            - mountPath: /var/log
               name: monitoring-fluent-bit-logs-volume
-            - mountPath: /fluent-bit/etc/fluent-bit-conf
+            - mountPath: /fluent-bit/etc
               name: monitoring-fluent-bit-config-volume
       volumes:
         - name: monitoring-fluent-bit-logs-volume

@@ -13,4 +13,4 @@ spec:
   accessModes:
     - ReadOnlyMany
   hostPath:
-    path: /var/log/containers
+    path: /var/log
