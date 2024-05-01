@@ -8,6 +8,8 @@ metadata:
     project: monitoring
 resources:
   - ./base/deployment.yml
+  - ./base/pv.yml
+  - ./base/pvc.yml
 configMapGenerator:
   - name: monitoring.fluent-bit.config-map
     files:
