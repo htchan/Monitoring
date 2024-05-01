@@ -1,0 +1,23 @@
+- op: replace #action 
+  path: /spec/rules
+  value:
+    - host: grafana.${private_host}
+      http:
+        paths:
+        - pathType: Prefix
+          path: /
+          backend:
+            service:
+              name: monitoring-grafana-service
+              port:
+                number: 3000
+    - host: grafana.${publis_host}
+      http:
+        paths:
+        - pathType: Prefix
+          path: /
+          backend:
+            service:
+              name: monitoring-grafana-service
+              port:
+                number: 3000
