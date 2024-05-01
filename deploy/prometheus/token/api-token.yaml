@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: Secret
-metadata:
-  name: prometheus-api-user-secret
-  annotations:
-    kubernetes.io/service-account.name: prometheus-api-user
-type: kubernetes.io/service-account-token
