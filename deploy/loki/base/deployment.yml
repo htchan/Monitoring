@@ -29,14 +29,16 @@ spec:
           volumeMounts:
             - mountPath: /loki
               name: monitoring-loki-storage-volume
-            # - mountPath: /etc/loki/local-config.yaml
-            #   name: monitoring-loki-config-volume
-          # args: [-config.gile=/etc/loki/local-config.yaml]
+            - mountPath: /etc/loki
+              name: monitoring-loki-config-volume
       volumes:
         - name: monitoring-loki-storage-volume
           persistentVolumeClaim:
             claimName: monitoring.loki.storage-claim
-        # - name: monitoring-loki-config-volume
-        #   persistentVolumeClaim:
-        #     claimName: monitoring.loki.config-claim
+        - name: monitoring-loki-config-volume
+          configMap:
+            name: monitoring.loki.config-map
+            items:
+              - key: config.yml
+                path: local-config.yaml
       restartPolicy: Always

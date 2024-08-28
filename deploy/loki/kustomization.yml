@@ -11,6 +11,10 @@ resources:
   - ./base/service.yml
   - ./base/pv.yml
   - ./base/pvc.yml
+configMapGenerator:
+  - name: monitoring.loki.config-map
+    files:
+      - ./patch/config.yml
 patches:
   - target:
       group: apps
