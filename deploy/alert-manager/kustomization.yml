@@ -24,5 +24,6 @@ patches:
       group: networking.k8s.io
       version: v1
       kind: Ingress
-      name: monitoring.alert-manager
+      name: monitoring-alert-manager-ingress
     path: ./patch/ingress.yml
+
