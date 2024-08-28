@@ -25,5 +25,5 @@ patches:
       group: networking.k8s.io
       version: v1
       kind: Ingress
-      name: monitoring.prometheus
+      name: monitoring-prometheus-ingress
     path: ./patch/ingress.yml

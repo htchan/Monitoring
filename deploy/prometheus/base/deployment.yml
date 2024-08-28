@@ -30,6 +30,7 @@ spec:
             - "--config.file=/etc/prometheus/prometheus.yml"
             - "--storage.tsdb.path=/prometheus/"
             - '--web.external-url=http://prometheus.raspi.home/'
+            - '--storage.tsdb.retention.time=15d'
           volumeMounts:
             - mountPath: /etc/prometheus/prometheus.yml
               name: monitoring-prometheus-volume
