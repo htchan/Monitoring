@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: monitoring.alert-manager  # Sets Deployment name
+  labels:
+    app: alert-manager
+    project: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alert-manager
+      project: monitoring
+  template:
+    metadata:
+      labels:
+        app: alert-manager
+        project: monitoring
+    spec:
+      containers:
+        - name: monitoring-alert-manager
+          image: prom/alertmanager:v0.27.0 # Sets Image
+          imagePullPolicy: "IfNotPresent"
+          resources:
+            limits:
+              memory: 500M
+            requests:
+              memory: 50M
+          volumeMounts:
+            - mountPath: /etc/alertmanager/alertmanager.yml
+              name: monitoring-alert-manager-config
+            - mountPath: /etc/alertmanager/bot_token
+              name: monitoring-alert-manager-telegram-bot-token
+            - mountPath: /alertmanager
+              name: monitoring-alert-manager-data
+      volumes:
+        - name: monitoring-alert-manager-config
+          persistentVolumeClaim:
+            claimName: monitoring.alert-manager.config-claim
+        - name: monitoring-alert-manager-telegram-bot-token
+          persistentVolumeClaim:
+            claimName: monitoring.alert-manager.telegram-bot-token-claim
+        - name: monitoring-alert-manager-data
+          persistentVolumeClaim:
+            claimName: monitoring.alert-manager.data-claim
+      restartPolicy: Always

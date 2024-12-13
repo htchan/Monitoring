@@ -1,0 +1,13 @@
+- op: replace #action 
+  path: /spec/rules
+  value:
+    - host: prometheus.${private_host}
+      http:
+        paths:
+        - pathType: Prefix
+          path: /
+          backend:
+            service:
+              name: monitoring-prometheus-service
+              port:
+                number: 9090

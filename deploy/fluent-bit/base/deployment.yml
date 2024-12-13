@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: monitoring.fluent-bit  # Sets Deployment name
+  labels:
+    app: fluent-bit
+    project: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fluent-bit
+      project: monitoring
+  template:
+    metadata:
+      labels:
+        app: fluent-bit
+        project: monitoring
+    spec:
+      containers:
+        - name: monitoring-fluent-bit
+          image: grafana/fluent-bit-plugin-loki:main # Sets Image
+          imagePullPolicy: "IfNotPresent"
+          resources:
+            limits:
+              memory: 30M
+            requests:
+              memory: 10M
+          command:
+            - /fluent-bit/bin/fluent-bit
+            - -R
+            - /fluent-bit/etc/parsers.conf
+            - -e
+            - /fluent-bit/bin/out_grafana_loki.so
+            - -c
+            - /fluent-bit/etc/fluent-bit.conf
+          volumeMounts:
+            - mountPath: /var/log
+              name: monitoring-fluent-bit-logs-volume
+            - mountPath: /fluent-bit/etc
+              name: monitoring-fluent-bit-config-volume
+      volumes:
+        - name: monitoring-fluent-bit-logs-volume
+          persistentVolumeClaim:
+            claimName: monitoring.fluent-bit.logs-claim
+        - name: monitoring-fluent-bit-config-volume
+          configMap:
+            name: monitoring.fluent-bit.config-map
+      restartPolicy: Always

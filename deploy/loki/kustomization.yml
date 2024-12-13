@@ -1,0 +1,25 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+metadata:
+  name: monitoring.loki  # Sets Deployment name
+  namespace: default
+  labels:
+    app: loki
+    project: monitoring
+resources:
+  - ./base/deployment.yml
+  - ./base/service.yml
+  - ./base/pv.yml
+  - ./base/pvc.yml
+configMapGenerator:
+  - name: monitoring.loki.config-map
+    files:
+      - ./patch/config.yml
+patches:
+  - target:
+      group: apps
+      version: v1
+      kind: Deployment
+      name: monitoring.loki
+      labelSelector: "app=loki,project=monitoring"
+    path: ./patch/deployment.yml

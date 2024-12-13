@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: monitoring.temperature-collector  # Sets Deployment name
+  labels:
+    app: temperature-collector
+    project: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: temperature-collector
+      project: monitoring
+  template:
+    metadata:
+      labels:
+        app: temperature-collector
+        project: monitoring
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: temperature-collector
+          image: monitoring-temperature-collector:latest # Sets Image
+          imagePullPolicy: "Never"
+          resources:
+            limits:
+              memory: 10M
+            requests:
+              memory: 2M
+      restartPolicy: Always

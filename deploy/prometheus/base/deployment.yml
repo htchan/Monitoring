@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: monitoring.prometheus  # Sets Deployment name
+  labels:
+    app: prometheus
+    project: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus
+      project: monitoring
+  template:
+    metadata:
+      labels:
+        app: prometheus
+        project: monitoring
+    spec:
+      containers:
+        - name: monitoring-prometheus
+          image: prom/prometheus:v2.40.6 # Sets Image
+          imagePullPolicy: "IfNotPresent"
+          resources:
+            limits:
+              memory: 260M
+            requests:
+              memory: 70M
+          args:
+            - "--config.file=/etc/prometheus/prometheus.yml"
+            - "--storage.tsdb.path=/prometheus/"
+            - '--web.external-url=http://prometheus.raspi.home/'
+            - '--storage.tsdb.retention.time=15d'
+          volumeMounts:
+            - mountPath: /etc/prometheus/prometheus.yml
+              name: monitoring-prometheus-volume
+            - mountPath: /prometheus
+              name: monitoring-prometheus-data
+            - mountPath: /prometheus-rules
+              name: monitoring-prometheus-rule
+            - mountPath: /api-token
+              name: api-token
+              readOnly: true
+      volumes:
+        - name: monitoring-prometheus-volume
+          persistentVolumeClaim:
+            claimName: monitoring.prometheus.config-claim
+        - name: monitoring-prometheus-data
+          persistentVolumeClaim:
+            claimName: monitoring.prometheus.data-claim
+        - name: monitoring-prometheus-rule
+          persistentVolumeClaim:
+            claimName: monitoring.prometheus.rule-claim
+        - name: api-token
+          secret:
+            secretName: monitoring.prometheus.api-user-secret
+      restartPolicy: Always

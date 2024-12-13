@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: monitoring.alert-manager.config-volume
+  labels:
+    label: local
+    app: alert-manager
+    project: monitoring
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 1Mi
+  accessModes:
+    - ReadOnlyMany
+  hostPath:
+    path: /volumes/monitoring-alert-manager-data/alertmanager.yml
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: monitoring.alert-manager.data-volume
+  labels:
+    label: local
+    app: alert-manager
+    project: monitoring
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadOnlyMany
+  hostPath:
+    path: /volumes/monitoring-alert-manager-data/data
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: monitoring.alert-manager.telegram-bot-token-volume
+  labels:
+    label: local
+    app: alert-manager
+    project: monitoring
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 1Mi
+  accessModes:
+    - ReadOnlyMany
+  hostPath:
+    path: /volumes/monitoring-alert-manager-data/bot_token
+

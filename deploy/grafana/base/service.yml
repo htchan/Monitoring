@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: monitoring-grafana-service # Sets service name
+  labels:
+    app: grafana
+    project: monitoring
+spec:
+  ports:
+    - protocol: TCP
+      port: 3000 # Sets port to run the postgres application
+      targetPort: 3000
+  selector:
+    app: grafana
+    project: monitoring

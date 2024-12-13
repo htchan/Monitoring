@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: monitoring.loki  # Sets Deployment name
+  labels:
+    app: loki
+    project: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: loki
+      project: monitoring
+  template:
+    metadata:
+      labels:
+        app: loki
+        project: monitoring
+    spec:
+      containers:
+        - name: loki
+          image: grafana/loki:latest # Sets Image
+          imagePullPolicy: "IfNotPresent"
+          resources:
+            limits:
+              memory: 500M
+            requests:
+              memory: 50M
+          volumeMounts:
+            - mountPath: /loki
+              name: monitoring-loki-storage-volume
+            - mountPath: /etc/loki
+              name: monitoring-loki-config-volume
+      volumes:
+        - name: monitoring-loki-storage-volume
+          persistentVolumeClaim:
+            claimName: monitoring.loki.storage-claim
+        - name: monitoring-loki-config-volume
+          configMap:
+            name: monitoring.loki.config-map
+            items:
+              - key: config.yml
+                path: local-config.yaml
+      restartPolicy: Always

@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: monitoring.jaeger  # Sets Deployment name
+  labels:
+    app: jaeger
+    project: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jaeger
+      project: monitoring
+  template:
+    metadata:
+      labels:
+        app: jaeger
+        project: monitoring
+    spec:
+      containers:
+        - name: jaeger
+          image: jaegertracing/all-in-one:latest # Sets Image
+          imagePullPolicy: "IfNotPresent"
+          resources:
+            limits:
+              memory: 100M
+            requests:
+              memory: 30M
+          env:
+            - name: SPAN_STORAGE_TYPE
+              value: "badger"
+            - name: BADGER_EPHEMERAL
+              value: "false"
+            - name: BADGER_DIRECTORY_VALUE
+              value: "/badger/data"
+            - name: BADGER_DIRECTORY_KEY
+              value: "/badger/key"
+            - name: COLLECTOR_OTLP_ENABLED
+              value: "true"
+          volumeMounts:
+            - mountPath: /badger
+              name: monitoring-jaeger-badger-volume
+      volumes:
+        - name: monitoring-jaeger-badger-volume
+          persistentVolumeClaim:
+            claimName: monitoring.jaeger.badger-claim
+      restartPolicy: Always
+
